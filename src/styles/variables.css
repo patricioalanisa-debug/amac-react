@@ -1,0 +1,43 @@
+/* variables.css
+   Design tokens tomados del prototipo de Figma y del manual de marca de AMAC. */
+:root {
+  /* Colores (manual de marca AMAC) */
+  --color-primario: #202945;          /* azul marino (Pantone 533 C) */
+  --color-primario-oscuro: #10152a;   /* hover de botones primarios */
+  --color-acento: #ff815c;            /* coral */
+  --color-acento-claro: #ff9a7d;      /* hover del coral */
+  --color-azul-claro: #cae4ef;        /* tarjetas */
+  --color-durazno: #fddaad;           /* avisos y resúmenes */
+  --color-fondo: #ffffff;
+  --color-fondo-suave: #f4f8fa;
+  --color-texto: #202945;
+  --color-texto-suave: #4a5168;       /* 7.9:1 sobre blanco */
+  --color-foco: #202945;
+  --color-foco-oscuro: #fddaad;       /* foco sobre fondos oscuros */
+
+  /* Tipografía (Figma: Baskerville para títulos, Work Sans para contenido) */
+  --fuente-base: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fuente-titulo: "Libre Baskerville", Baskerville, Georgia, serif;
+  --texto-base: 1.125rem;   /* 18 px */
+  --texto-chico: 1rem;      /* 16 px */
+  --texto-h3: 1.25rem;
+  --texto-h2: 1.5rem;
+  --texto-h1: 1.875rem;
+
+  /* Espaciados y bordes */
+  --espacio-xs: 0.25rem;
+  --espacio-s: 0.5rem;
+  --espacio-m: 1rem;
+  --espacio-l: 1.5rem;
+  --espacio-xl: 2rem;
+  --espacio-xxl: 3rem;
+  --radio: 0.75rem;
+  --alto-toque: 3rem;       /* 48 px: mínimo cómodo para tocar */
+}
+
+@media (min-width: 768px) {
+  :root {
+    --texto-h1: 2.5rem;
+    --texto-h2: 1.75rem;
+  }
+}

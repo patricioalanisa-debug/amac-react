@@ -1,0 +1,111 @@
+/* layout.css: contenedor, encabezado, pie y rejillas (mobile-first) */
+.contenedor {
+  width: min(100% - 2rem, 1200px);
+  margin-inline: auto;
+}
+.contenedor--estrecho { width: min(100% - 2rem, 760px); }
+
+main { padding-block: var(--espacio-l) var(--espacio-xxl); }
+
+/* Barra de ayuda (visible en todas las páginas) */
+.barra-ayuda {
+  background: var(--color-acento);
+  color: var(--color-primario);
+}
+.barra-ayuda__interior {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--espacio-xs);
+}
+.barra-ayuda a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-s);
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: var(--color-primario);
+  text-align: center;
+}
+
+/* Encabezado */
+.encabezado {
+  background: var(--color-primario);
+  color: #fff;
+}
+.encabezado__interior {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-s);
+  padding-block: var(--espacio-m);
+}
+.menu__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 1024px) {
+  .encabezado__interior {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Pie de página */
+.pie {
+  padding-block: var(--espacio-xl);
+  background: var(--color-primario);
+  color: #fff;
+}
+.pie a { color: #fff; }
+.pie__interior {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-l);
+}
+.pie__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pie__lista a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+.pie__legal {
+  margin: var(--espacio-l) auto 0;
+  font-size: var(--texto-chico);
+}
+
+@media (min-width: 768px) {
+  .pie__interior { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Lista de tarjetas: 1 columna en celular, 2 en tablet, 3 en escritorio */
+.lista-tarjetas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-l);
+}
+@media (min-width: 768px) {
+  .lista-tarjetas { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .lista-tarjetas { grid-template-columns: repeat(3, 1fr); }
+  .lista-tarjetas--doble { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Detalle con columna lateral */
+.dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-xl);
+}
+@media (min-width: 1024px) {
+  .dos-columnas { grid-template-columns: 2fr 1fr; align-items: start; }
+}

@@ -1,0 +1,81 @@
+/* base.css: reset, tipografía, enlaces y foco */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 100%;               /* respeta el tamaño elegido en el navegador */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fuente-base);
+  font-size: var(--texto-base);
+  line-height: 1.6;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3 {
+  margin: 0 0 var(--espacio-m);
+  font-family: var(--fuente-titulo);
+  line-height: 1.25;
+  color: var(--color-primario);
+}
+h1 { font-size: var(--texto-h1); }
+h2 { font-size: var(--texto-h2); }
+h3 { font-size: var(--texto-h3); }
+
+p, ul, dl, address { margin: 0 0 var(--espacio-m); }
+ul { padding-left: 1.25rem; }
+address { font-style: normal; }
+
+a {
+  color: var(--color-primario);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+a:hover { text-decoration-thickness: 0.15em; }
+
+img { display: block; max-width: 100%; height: auto; }
+
+/* Foco visible al navegar con Tab */
+:focus-visible {
+  outline: 3px solid var(--color-foco);
+  outline-offset: 3px;
+}
+
+/* Saltar al contenido */
+.saltar-contenido {
+  position: absolute;
+  left: -9999px;
+}
+.saltar-contenido:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-fondo);
+  color: var(--color-primario);
+  font-weight: 700;
+  border: 3px solid var(--color-primario);
+  border-radius: var(--radio);
+}
+
+/* Texto solo para lectores de pantalla */
+.solo-lector {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.subtitulo {
+  font-size: var(--texto-base);
+  color: var(--color-texto-suave);
+}
