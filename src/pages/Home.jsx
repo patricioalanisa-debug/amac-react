@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
+import { supabase } from "../lib/supabase";
 
 function Home() {
   const [vacantes, setVacantes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [horario, setHorario] = useState("");
+  const [tipoEmpleo, setTipoEmpleo] = useState("");
 
   useEffect(() => {
     const cargarVacantes = async () => {
@@ -31,7 +32,10 @@ function Home() {
     const coincideHorario =
       horario === "" || vacante.horario === horario;
 
-    return coincideBusqueda && coincideHorario;
+    const coincideTipoEmpleo =
+      tipoEmpleo === "" || vacante.tipo_empleo === tipoEmpleo;
+
+    return coincideBusqueda && coincideHorario && coincideTipoEmpleo;
   });
 
   return (
@@ -52,6 +56,16 @@ function Home() {
         <option value="">Todos los horarios</option>
         <option value="Matutino">Matutino</option>
         <option value="Vespertino">Vespertino</option>
+      </select>
+
+      <select
+        value={tipoEmpleo}
+        onChange={(e) => setTipoEmpleo(e.target.value)}
+      >
+        <option value="">Todos los tipos de empleo</option>
+        <option value="Tiempo completo">Tiempo completo</option>
+        <option value="Medio tiempo">Medio tiempo</option>
+        <option value="Por horas">Por horas</option>
       </select>
 
       {vacantesFiltradas.map((vacante) => (
