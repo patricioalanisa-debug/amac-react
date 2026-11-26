@@ -379,3 +379,7 @@ button.menu__enlace {
   border-top: 0;
   border-inline: 0;
 }
+
+.menu__salir { background: transparent; border: 0; border-bottom: 4px solid transparent; width: 100%; font-weight: 600; }
+button:disabled { cursor: not-allowed; opacity: .7; }
+@media (min-width: 1024px) { .menu__salir { width: auto; } }
