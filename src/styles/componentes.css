@@ -371,3 +371,11 @@
 :root[data-contraste="alto"] .resumen, :root[data-contraste="alto"] .aviso { border: 2px solid #000; }
 .menu__lista { gap: 0; }
 @media (min-width: 1024px) { .menu__lista { gap: var(--espacio-s); } }
+
+button.menu__enlace {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border-top: 0;
+  border-inline: 0;
+}
