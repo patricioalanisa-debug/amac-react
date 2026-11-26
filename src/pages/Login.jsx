@@ -36,7 +36,7 @@ export default function Login() {
     }
     setEnviando(false);
 
-    const destinos = { candidato: "/mis-solicitudes", empresa: "/", admin: "/" };
+    const destinos = { candidato: "/mis-solicitudes", empresa: "/empresa/vacantes", admin: "/" };
     navigate(destinos[perfil?.rol] ?? "/");
   }
 
@@ -107,7 +107,7 @@ export default function Login() {
             </div>
           </form>
           <p className="resumen__nota">
-            ¿Tu empresa aún no está registrada? <a href="tel:+528110223344">Llama a AMAC</a> para registrarla.
+            ¿Tu empresa aún no está registrada? <Link to="/registro-empresa">Crear cuenta de empresa</Link>.
           </p>
         </section>
 
