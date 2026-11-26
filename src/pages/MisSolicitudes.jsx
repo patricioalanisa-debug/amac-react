@@ -16,6 +16,7 @@ export default function MisSolicitudes() {
   const usuarioId = sesion?.user.id;
   const [solicitudes, setSolicitudes] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [cancelando, setCancelando] = useState(null);
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
@@ -43,20 +44,27 @@ export default function MisSolicitudes() {
   }, [usuarioId]);
 
   async function cancelar(solicitud) {
+    if (cancelando !== null) return;
     if (!window.confirm("¿Seguro que quieres cancelar esta solicitud?")) return;
     setMensaje("");
+    setCancelando(solicitud.id);
+    try {
     const { data, error } = await supabase
       .from("solicitudes")
       .update({ estatus: "Cancelada" })
       .eq("id", solicitud.id)
+      .eq("candidato_id", usuarioId)
+      .in("estatus", ["Enviada", "En revisión"])
       .select("id");
     if (error || !data || data.length === 0) {
       setMensaje("No pudimos cancelar la solicitud. Puede que ya haya sido resuelta.");
       return;
     }
     setSolicitudes(
-      solicitudes.map((s) => (s.id === solicitud.id ? { ...s, estatus: "Cancelada" } : s))
+      anteriores => anteriores.map((s) => (s.id === solicitud.id ? { ...s, estatus: "Cancelada" } : s))
     );
+    } catch { setMensaje("No pudimos cancelar la solicitud. Intenta nuevamente."); }
+    finally { setCancelando(null); }
   }
 
   return (
@@ -64,7 +72,7 @@ export default function MisSolicitudes() {
       <h1>Mis solicitudes</h1>
       <p className="subtitulo">Aquí ves cómo va cada una.</p>
       <div className="aviso">
-        <p>Te avisamos por correo cuando cambie el estatus de una solicitud.</p>
+        <p>Consulta aquí el estatus actualizado de tus solicitudes.</p>
       </div>
 
       {mensaje && <p role="alert" className="aviso">{mensaje}</p>}
@@ -110,8 +118,9 @@ export default function MisSolicitudes() {
                     className="boton boton--secundario"
                     type="button"
                     onClick={() => cancelar(s)}
+                    disabled={cancelando !== null}
                   >
-                    Cancelar solicitud
+                    {cancelando === s.id ? "Cancelando…" : "Cancelar solicitud"}
                     <span className="solo-lector"> de {s.vacante?.titulo}</span>
                   </button>
                 </div>
