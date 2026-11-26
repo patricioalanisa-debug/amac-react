@@ -2,61 +2,43 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
-const vacio = {
-  nombre: "",
-  correo: "",
-  telefono: "",
-  edad: "",
-  colonia: "",
-  experiencia: "",
-  contrasena: "",
-  contrasena2: "",
-};
-
 export default function RegistroCandidato() {
   const navigate = useNavigate();
-  const [datos, setDatos] = useState(vacio);
-  const [terminos, setTerminos] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [enviando, setEnviando] = useState(false);
-
-  function cambiar(evento) {
-    setDatos({ ...datos, [evento.target.name]: evento.target.value });
-  }
 
   async function enviar(evento) {
     evento.preventDefault();
     setMensaje("");
+    const f = new FormData(evento.currentTarget);
 
-    const edad = Number(datos.edad);
-    if (!datos.nombre || !datos.correo || !datos.telefono || !datos.colonia) {
-      return setMensaje("Llena todos los campos obligatorios.");
-    }
+    const edad = Number(f.get("edad"));
     if (!(edad >= 18 && edad <= 120)) {
       return setMensaje("Escribe una edad entre 18 y 120 años.");
     }
-    if (datos.contrasena.length < 8) {
-      return setMensaje("La contraseña debe tener al menos 8 caracteres.");
-    }
-    if (datos.contrasena !== datos.contrasena2) {
+    if (f.get("clave") !== f.get("clave2")) {
       return setMensaje("Las contraseñas no coinciden.");
     }
-    if (!terminos) {
-      return setMensaje("Debes aceptar los términos y el aviso de privacidad.");
-    }
+
+    // La tabla perfiles guarda la experiencia como un solo texto
+    const partes = [];
+    if (f.get("puesto")) partes.push(`Último puesto: ${f.get("puesto")}`);
+    if (f.get("empresa")) partes.push(`Empresa: ${f.get("empresa")}`);
+    if (f.get("anios")) partes.push(`Años de experiencia: ${f.get("anios")}`);
+    if (f.get("habilidades")) partes.push(`Habilidades: ${f.get("habilidades")}`);
 
     setEnviando(true);
     const { error } = await supabase.auth.signUp({
-      email: datos.correo,
-      password: datos.contrasena,
+      email: f.get("correo").trim(),
+      password: f.get("clave"),
       options: {
         data: {
           rol: "candidato",
-          nombre: datos.nombre,
-          telefono: datos.telefono,
+          nombre: f.get("nombre"),
+          telefono: f.get("telefono"),
           edad,
-          colonia: datos.colonia,
-          experiencia: datos.experiencia,
+          colonia: f.get("colonia"),
+          experiencia: partes.join(". "),
         },
       },
     });
@@ -76,66 +58,106 @@ export default function RegistroCandidato() {
     <div className="contenedor contenedor--estrecho">
       <Link className="enlace-volver" to="/login">← Volver al inicio de sesión</Link>
       <h1>Crear cuenta de candidato</h1>
-      <p className="subtitulo">Llena tus datos. Después AMAC revisará tu registro.</p>
+      <p className="subtitulo">Llena tus datos. Los campos son necesarios para poder postularte.</p>
 
-      <form onSubmit={enviar} noValidate>
+      <form onSubmit={enviar}>
         <fieldset className="grupo-campos">
           <legend>Datos personales</legend>
           <div className="campo-formulario">
             <label htmlFor="nombre">Nombre completo</label>
-            <input id="nombre" name="nombre" type="text" autoComplete="name"
-              value={datos.nombre} onChange={cambiar} />
+            <input type="text" id="nombre" name="nombre" autoComplete="name" required />
           </div>
           <div className="campos-dobles">
             <div className="campo-formulario">
               <label htmlFor="correo">Correo electrónico</label>
-              <input id="correo" name="correo" type="email" autoComplete="email"
-                value={datos.correo} onChange={cambiar} />
+              <input type="email" id="correo" name="correo" autoComplete="email" required />
+              <p className="campo-formulario__ayuda">Ejemplo: nombre@correo.com</p>
             </div>
             <div className="campo-formulario">
               <label htmlFor="telefono">Teléfono</label>
-              <input id="telefono" name="telefono" type="tel" autoComplete="tel"
-                value={datos.telefono} onChange={cambiar} />
+              <input type="tel" id="telefono" name="telefono" autoComplete="tel" required />
+              <p className="campo-formulario__ayuda">Ejemplo: 81 1234 5678</p>
             </div>
             <div className="campo-formulario">
               <label htmlFor="edad">Edad</label>
-              <input id="edad" name="edad" type="number" min="18" max="120"
-                value={datos.edad} onChange={cambiar} />
+              <input type="number" id="edad" name="edad" min="18" max="120" required />
             </div>
             <div className="campo-formulario">
-              <label htmlFor="colonia">Colonia</label>
-              <input id="colonia" name="colonia" type="text"
-                value={datos.colonia} onChange={cambiar} />
-            </div>
-            <div className="campo-formulario">
-              <label htmlFor="contrasena">Contraseña</label>
-              <input id="contrasena" name="contrasena" type="password"
-                autoComplete="new-password" value={datos.contrasena} onChange={cambiar} />
+              <label htmlFor="clave">Contraseña</label>
+              <input type="password" id="clave" name="clave" autoComplete="new-password" minLength={8} required />
               <p className="campo-formulario__ayuda">Mínimo 8 caracteres.</p>
             </div>
             <div className="campo-formulario">
-              <label htmlFor="contrasena2">Repetir contraseña</label>
-              <input id="contrasena2" name="contrasena2" type="password"
-                autoComplete="new-password" value={datos.contrasena2} onChange={cambiar} />
+              <label htmlFor="clave2">Repetir contraseña</label>
+              <input type="password" id="clave2" name="clave2" autoComplete="new-password" minLength={8} required />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset className="grupo-campos">
+          <legend>Medio de contacto preferido</legend>
+          <div className="opcion">
+            <input type="radio" id="contacto-correo" name="contacto" value="correo" defaultChecked />
+            <label htmlFor="contacto-correo">Por correo</label>
+          </div>
+          <div className="opcion">
+            <input type="radio" id="contacto-telefono" name="contacto" value="telefono" />
+            <label htmlFor="contacto-telefono">Por teléfono</label>
+          </div>
+        </fieldset>
+
+        <fieldset className="grupo-campos">
+          <legend>Dirección</legend>
+          <div className="campo-formulario">
+            <label htmlFor="calle">Calle y número</label>
+            <input type="text" id="calle" name="calle" autoComplete="street-address" />
+          </div>
+          <div className="campos-dobles">
+            <div className="campo-formulario">
+              <label htmlFor="colonia">Colonia</label>
+              <input type="text" id="colonia" name="colonia" required />
+            </div>
+            <div className="campo-formulario">
+              <label htmlFor="municipio">Municipio</label>
+              <input type="text" id="municipio" name="municipio" autoComplete="address-level2" />
+            </div>
+            <div className="campo-formulario">
+              <label htmlFor="cp">Código postal</label>
+              <input type="text" id="cp" name="cp" inputMode="numeric" autoComplete="postal-code" />
             </div>
           </div>
         </fieldset>
 
         <fieldset className="grupo-campos">
           <legend>Experiencia laboral</legend>
+          <div className="campos-dobles">
+            <div className="campo-formulario">
+              <label htmlFor="puesto">Último puesto</label>
+              <input type="text" id="puesto" name="puesto" />
+              <p className="campo-formulario__ayuda">Ejemplo: Cajera</p>
+            </div>
+            <div className="campo-formulario">
+              <label htmlFor="empresa">Empresa donde trabajaste</label>
+              <input type="text" id="empresa" name="empresa" />
+            </div>
+            <div className="campo-formulario">
+              <label htmlFor="anios">Años de experiencia</label>
+              <input type="number" id="anios" name="anios" min="0" max="60" />
+            </div>
+          </div>
           <div className="campo-formulario">
-            <label htmlFor="experiencia">Tu experiencia y habilidades</label>
-            <textarea id="experiencia" name="experiencia"
-              value={datos.experiencia} onChange={cambiar} />
-            <p className="campo-formulario__ayuda">
-              Ejemplo: 4 años como cajera, atención a clientes.
-            </p>
+            <label htmlFor="habilidades">Habilidades</label>
+            <textarea id="habilidades" name="habilidades" />
+            <p className="campo-formulario__ayuda">Ejemplo: atención a clientes, caja, computadora.</p>
+          </div>
+          <div className="campo-formulario">
+            <label htmlFor="curriculum">Currículum (PDF o Word)</label>
+            <input type="file" id="curriculum" name="curriculum" accept=".pdf,.doc,.docx" />
           </div>
         </fieldset>
 
         <div className="opcion">
-          <input id="terminos" type="checkbox" checked={terminos}
-            onChange={(e) => setTerminos(e.target.checked)} />
+          <input type="checkbox" id="terminos" name="terminos" required />
           <label htmlFor="terminos">Acepto los términos y el aviso de privacidad</label>
         </div>
 

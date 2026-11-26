@@ -13,6 +13,10 @@ function App() {
       <Encabezado />
       <main id="principal" tabIndex={-1}>
         <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/vacante/:id" element={<VacanteDetalle />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<RegistroCandidato />} />
       <Route path="/" element={<Home />} />
       <Route path="/vacante/:id" element={<VacanteDetalle />} />
       <Route path="/login" element={<Login />} />
