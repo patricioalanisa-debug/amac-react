@@ -36,7 +36,7 @@ export default function Login() {
     }
     setEnviando(false);
 
-    const destinos = { candidato: "/mis-solicitudes", empresa: "/empresa/vacantes", admin: "/" };
+    const destinos = { candidato: "/mis-solicitudes", empresa: "/empresa/vacantes", admin: "/admin" };
     navigate(destinos[perfil?.rol] ?? "/");
   }
 

@@ -13,10 +13,10 @@ export default function RegistroEmpresa() {
       const {data,error}=await supabase.auth.signUp({email:f.get("correo").trim(),password:f.get("clave"),options:{data:{rol:"empresa",nombre,giro,telefono}}});
       if(error) throw error;
       if(data.session) navigate("/empresa/vacantes",{replace:true});
-      else setExito("Revisa tu correo para confirmar la cuenta. Después inicia sesión como empresa.");
+      else setExito("Revisa tu correo para confirmar la cuenta. Después inicia sesión como empresa y espera la aprobación de AMAC.");
     } catch {setError("No pudimos crear la cuenta. Revisa los datos e intenta nuevamente.");} finally {setOcupado(false);}
   }
-  return <div className="contenedor contenedor--estrecho"><Link className="enlace-volver" to="/login">← Volver a iniciar sesión</Link><h1>Registrar empresa</h1><p className="subtitulo">Crea una cuenta para publicar oportunidades laborales.</p>
+  return <div className="contenedor contenedor--estrecho"><Link className="enlace-volver" to="/login">← Volver a iniciar sesión</Link><h1>Registrar empresa</h1><p className="subtitulo">Crea una cuenta. AMAC debe aprobarla antes de que puedas enviar vacantes.</p>
     {exito ? <><p className="aviso" role="status">{exito}</p><Link className="boton boton--primario" to="/login">Iniciar sesión</Link></> : <form onSubmit={registrar}><fieldset className="grupo-campos"><legend>Datos de la empresa</legend>
     {[["nombre","Nombre de la empresa","text","organization"],["giro","Giro de la empresa","text","off"],["telefono","Teléfono","tel","tel"],["correo","Correo electrónico","email","email"],["clave","Contraseña","password","new-password"]].map(([id,label,type,auto])=><div className="campo-formulario" key={id}><label htmlFor={id}>{label}</label><input id={id} name={id} type={type} autoComplete={auto} required minLength={id==="clave"?8:undefined} /></div>)}<p>Mínimo 8 caracteres para la contraseña.</p></fieldset>
     {error && <p className="aviso" role="alert">{error}</p>}<button className="boton boton--primario" disabled={ocupado}>{ocupado?"Registrando…":"Crear cuenta de empresa"}</button></form>}</div>;
