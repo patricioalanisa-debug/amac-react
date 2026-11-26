@@ -1,0 +1,17 @@
+/* Estilos aislados del panel administrativo. No modifica los flujos A, B y C. */
+.admin-panel { padding-block: 1rem 2rem; }
+.admin-eyebrow { display:flex; align-items:center; gap:.5rem; font-weight:700; color:var(--color-texto-suave); }
+.admin-nav { display:flex; flex-wrap:wrap; gap:.75rem; margin:1.5rem 0; padding:1rem; background:#fff; border:1px solid var(--color-primario); border-radius:var(--radio); }
+.admin-nav a { display:inline-flex; align-items:center; gap:.5rem; padding:.65rem 1rem; min-height:48px; border-radius:.5rem; font-weight:600; }
+.admin-nav a[aria-current="page"] {background:var(--color-primario);color:#fff;}
+.admin-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1.25rem;margin-block:1rem 2rem;}
+.admin-card {display:flex;flex-direction:column;gap:.85rem;background:#fff;border:1px solid var(--color-primario);border-top:5px solid var(--color-acento);border-radius:var(--radio);padding:1.4rem;box-shadow:0 3px 12px #20294512;min-width:0;}
+.admin-card h2 {display:flex;align-items:center;gap:.6rem;margin:0;overflow-wrap:anywhere;}
+.admin-metrica {text-decoration:none;background:var(--color-azul-claro);color:var(--color-texto);}
+.admin-metrica strong {font-size:2.3rem;line-height:1.2;color:var(--color-primario);}
+.admin-enlace {text-decoration:underline;font-weight:700;margin-top:auto;}
+.admin-estado {align-self:flex-start;background:var(--color-durazno);border:1px solid var(--color-primario);border-radius:999px;padding:.3rem .7rem;font-weight:600;}
+.admin-datos {display:grid;gap:.65rem;padding:1rem;background:var(--color-fondo-suave);border-radius:.5rem;margin:0;overflow-wrap:anywhere;}
+.admin-datos dt {font-weight:700;}.admin-datos dd {margin:0;}
+.admin-card .boton {width:100%;}
+:root[data-contraste="alto"] .admin-card,:root[data-contraste="alto"] .admin-datos {border:2px solid #000;box-shadow:none;}
