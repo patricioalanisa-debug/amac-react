@@ -1,6 +1,16 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/AuthContext";
 
 export default function Encabezado() {
+  const { sesion } = useAuth();
+  const navigate = useNavigate();
+
+  async function cerrarSesion() {
+    await supabase.auth.signOut();
+    navigate("/");
+  }
+
   return (
     <>
       <div className="barra-ayuda">
@@ -27,7 +37,7 @@ export default function Encabezado() {
               <li><NavLink className="menu__enlace" to="/quienes-somos">Quiénes somos</NavLink></li>
               <li><NavLink className="menu__enlace" to="/mis-solicitudes">Mis solicitudes</NavLink></li>
               <li><NavLink className="menu__enlace" to="/empresa/vacantes">Panel de empresa</NavLink></li>
-              <li><NavLink className="menu__enlace menu__enlace--destacado" to="/login">Entrar</NavLink></li>
+              <li> {sesion ? (<button className="menu__enlace menu__enlace--destacado" type="button" onClick={cerrarSesion}>Cerrar sesión</button>) : (<NavLink className="menu__enlace menu__enlace--destacado" to="/login">Entrar</NavLink>)} </li>
             </ul>
           </nav>
         </div>
