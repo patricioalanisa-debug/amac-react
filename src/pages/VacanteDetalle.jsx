@@ -54,7 +54,7 @@ function VacanteDetalle() {
 
           <aside className="resumen">
             <h2>Resumen</h2>
-            <BotonPostularme vacanteId={vacante.id} />
+            <BotonPostularme key={vacante.id} vacanteId={vacante.id} estado={vacante.estado} />
             <dl>
               <dt>Sueldo</dt>
               <dd>{Number(vacante.sueldo).toLocaleString("es-MX", {style:"currency",currency:"MXN"})} mensuales</dd>
