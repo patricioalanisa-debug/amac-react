@@ -63,10 +63,10 @@ React, Vite, React Router, Supabase (PostgreSQL, Auth, RLS), CSS y Vercel.
 | RF-008, RF-009 | Inicio y cierre de sesión | 🟡 |
 | RF-004, RF-054 | Postulación y aprobación | 🟡 |
 | RF-005, RF-006 | Mis solicitudes y cancelación | 🟡 |
-| RF-015 | Registro de empresa | ❌ |
-| RF-019 | Publicar vacante | ❌ |
-| RF-020, RF-021 | Mis vacantes | ❌ |
-| RF-022, RF-024 | Solicitudes recibidas | ❌ |
+| RF-015 | Registro de empresa | 🟡 |
+| RF-019 | Publicar vacante | 🟡 |
+| RF-020, RF-021 | Mis vacantes | 🟡 |
+| RF-022, RF-024 | Solicitudes recibidas | 🟡 |
 | RF-010 | Seguridad RLS | 🟡 |
 
 ## Cuentas de prueba (pendientes de crear y verificar)
@@ -90,4 +90,17 @@ Crear cuentas ficticias exclusivas de la demo, sin reutilizar credenciales perso
 7. Comprobar alto contraste, teclado, móvil y Lighthouse (accesibilidad ≥ 90).
 8. Verificar compilación, URL pública, recarga de rutas y seis vacantes de ejemplo cuando C las cargue.
 
-Pendientes: resultados reales, URL de Vercel, video y diapositivas. Al integrar C, actualizar rutas, tabla RF y pruebas.
+Pendientes: resultados reales, URL de Vercel, video y diapositivas. 
+
+## Parte C: empresa y datos de ejemplo
+
+Rutas: `/registro-empresa` (pública), `/empresa/vacantes`, `/empresa/publicar`, `/empresa/solicitudes` (protegidas por rol empresa). Se reutilizan AuthContext, RutaProtegida, Supabase y los estilos de AMAC. No se requieren tablas nuevas.
+
+1. Registrar una empresa ficticia desde Login → Empresa → Crear cuenta de empresa. Confirmar correo si corresponde.
+2. En Supabase SQL Editor, ejecutar `supabase/vacantes_ejemplo.sql` después de sustituir el correo de ejemplo por el de la empresa registrada. Carga seis vacantes ficticias activas sin duplicarlas si se repite con el mismo propietario.
+3. Desde la app publicar otra vacante con un teléfono de prueba autorizado y otra sin teléfono. Comprobar validaciones, conteo, pausa, reactivación y cierre. Mantener al menos seis vacantes activas para la entrega.
+4. Con un candidato aprobado, postularse; con la empresa revisar nombre, edad, colonia, experiencia y cambiar estatus. Comprobar que el candidato vea el cambio y no cancele una solicitud aceptada.
+5. Probar acceso cruzado de roles, empresa ajena, sesión cerrada, RLS y recarga de rutas. Verificar que la empresa no pueda modificar solicitudes canceladas.
+6. Completar cuentas de prueba verificadas, integrantes, URL Vercel, resultados, video y diapositivas.
+
+Decisiones: cerrar es definitivo desde el panel; el teléfono de contacto es opcional y se guarda solo si se activa la opción. No se incluyen funciones opcionales (logo, edición de perfil, administración). Los estados RF permanecen parciales hasta pruebas reales.
