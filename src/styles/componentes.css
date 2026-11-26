@@ -383,3 +383,43 @@ button.menu__enlace {
 .menu__salir { background: transparent; border: 0; border-bottom: 4px solid transparent; width: 100%; font-weight: 600; }
 button:disabled { cursor: not-allowed; opacity: .7; }
 @media (min-width: 1024px) { .menu__salir { width: auto; } }
+
+/* Refinamiento visual AMAC: conserva los colores y recursos originales. */
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+#root > main { flex: 1; }
+main { background: var(--color-fondo-suave); }
+:root[data-contraste="alto"] main { background: #fff; }
+.logo img { flex: none; object-fit: contain; }
+.boton { gap: .5rem; }
+.boton:not(:disabled):hover { box-shadow: 0 2px 6px #20294522; }
+.tarjeta-vacante { box-shadow: 0 3px 12px #2029450d; }
+.tarjeta-vacante__datos li { align-items: flex-start; }
+.tarjeta-vacante__datos .icono { margin-top: .15rem; }
+.cabecera-panel { margin-bottom: var(--espacio-l); }
+.sobre-titulo { font-size: var(--texto-chico); font-weight: 700; color: var(--color-texto-suave); margin-bottom: .4rem; }
+.cabecera-panel h1 { margin-bottom: .5rem; }
+.tarjeta-panel { gap: 1rem; }
+.tarjeta-panel__cabecera { display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; }
+.tarjeta-panel__cabecera .etiqueta-estatus { margin: 0; }
+.tarjeta-panel__vacante { display: flex; gap: .65rem; align-items: flex-start; margin: 0; }
+.tarjeta-panel .tarjeta-vacante__acciones { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.tarjeta-panel .tarjeta-vacante__acciones > a { grid-column: 1 / -1; }
+.tarjeta-panel .tarjeta-vacante__acciones .boton { padding-inline: .65rem; }
+.perfil-mini { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.perfil-mini__icono { display: grid; place-items: center; background: #fff; color: var(--color-primario); border: 1px solid var(--color-primario); border-radius: 50%; width: 2.75rem; height: 2.75rem; flex: none; }
+.datos-perfil { display: grid; gap: .75rem; margin: 0; padding: 1rem; background: var(--color-fondo); border-radius: var(--radio); }
+.datos-perfil dt { display: flex; align-items: center; gap: .5rem; font-weight: 700; }
+.datos-perfil dd { margin: .25rem 0 0 2rem; }
+.tarjeta-panel__formulario { border-top: 1px solid var(--color-primario); padding-top: 1rem; margin-top: auto; }
+.tarjeta-panel__formulario .campo-formulario { margin-bottom: .75rem; }
+.tarjeta-panel__formulario .boton { width: 100%; }
+.pie__titulo { font-weight: 700; margin-bottom: .75rem; }
+.pie__marca { display: inline-flex; gap: .75rem; align-items: center; text-decoration: none; margin-bottom: .75rem; }
+.pie__marca img { flex: none; object-fit: contain; }
+.pie__marca strong { display: block; letter-spacing: .18em; font-size: 1.4rem; }
+.pie__marca small { display: block; font-size: var(--texto-chico); }
+.pie__contacto { display: inline-flex; gap: .5rem; align-items: center; }
+.pie__legal { border-top: 1px solid #ffffff55; padding-top: 1rem; }
+:root[data-contraste="alto"] .datos-perfil { border: 2px solid #000; }
+:root[data-contraste="alto"] .tarjeta-vacante, :root[data-contraste="alto"] .boton { box-shadow: none; }
+@media (max-width: 480px) { .tarjeta-panel .tarjeta-vacante__acciones { grid-template-columns: 1fr; } }
