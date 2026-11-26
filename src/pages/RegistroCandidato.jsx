@@ -20,7 +20,6 @@ export default function RegistroCandidato() {
       return setMensaje("Las contraseñas no coinciden.");
     }
 
-    // La tabla perfiles guarda la experiencia como un solo texto
     const partes = [];
     if (f.get("puesto")) partes.push(`Último puesto: ${f.get("puesto")}`);
     if (f.get("empresa")) partes.push(`Empresa: ${f.get("empresa")}`);
@@ -45,6 +44,7 @@ export default function RegistroCandidato() {
     setEnviando(false);
 
     if (error) {
+      console.error(error);
       return setMensaje(
         error.code === "user_already_exists"
           ? "Ese correo ya tiene una cuenta."

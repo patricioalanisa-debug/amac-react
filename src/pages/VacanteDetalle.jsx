@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import BotonPostularme from "../components/BotonPostularme";
 
 function VacanteDetalle() {
   const { id } = useParams();
@@ -53,7 +54,7 @@ function VacanteDetalle() {
 
           <aside className="resumen">
             <h2>Resumen</h2>
-
+            <BotonPostularme vacanteId={vacante.id} />
             <dl>
               <dt>Sueldo</dt>
               <dd>{Number(vacante.sueldo).toLocaleString("es-MX", {style:"currency",currency:"MXN"})} mensuales</dd>
