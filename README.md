@@ -28,7 +28,7 @@ RLS se activa en las tres tablas. PostgreSQL comprueba las reglas incluso si se 
 | solicitudes | Candidato cancela si no está resuelta | Solo Enviada o En revisión pueden pasar a Cancelada. |
 | solicitudes | Empresa cambia el estatus | Solo solicitudes de sus ofertas, no canceladas, a En revisión, Aceptada o Rechazada. |
 
-Los permisos de actualización de solicitudes se limitan a `estatus`. La aprobación se cambia desde el Table Editor por el equipo autorizado. `supabase/esquema.sql` describe una instalación nueva; `supabase/correcciones_parte_a.sql` aplica los ajustes a la base existente.
+Los permisos de actualización de solicitudes se limitan a `estatus`. La aprobación se cambia desde el Table Editor por el equipo autorizado o desde el panel admin tras instalar su migración. `supabase/esquema.sql` describe una instalación nueva; `supabase/correcciones_parte_a.sql` aplica los ajustes a la base existente.
 
 ## Configuración local y despliegue (parte A)
 
@@ -77,7 +77,7 @@ React, Vite, React Router, Supabase (PostgreSQL, Auth, RLS), CSS y Vercel.
 | Candidato sin aprobar | Pendiente | Pendiente |
 | Empresa | Pendiente | Pendiente |
 
-Crear cuentas ficticias exclusivas de la demo, sin reutilizar credenciales personales. Confirmar sus correos si Auth lo requiere. El equipo autorizado debe marcar `aprobado = true` únicamente para el candidato de prueba aprobado desde Table Editor. Completar la tabla con las credenciales de demostración solicitadas por el profesor, sin publicar claves de administración ni llaves privadas.
+Crear cuentas ficticias exclusivas de la demo, sin reutilizar credenciales personales. Confirmar sus correos si Auth lo requiere. Después de la migración, el administrador debe aprobar al candidato de prueba desde el panel de administración; no editar solo el booleano `aprobado`. Completar la tabla con las credenciales de demostración solicitadas por el profesor, sin publicar claves de administración ni llaves privadas.
 
 ## Pruebas de A y B
 
@@ -97,10 +97,20 @@ Pendientes: resultados reales, URL de Vercel, video y diapositivas.
 Rutas: `/registro-empresa` (pública), `/empresa/vacantes`, `/empresa/publicar`, `/empresa/solicitudes` (protegidas por rol empresa). Se reutilizan AuthContext, RutaProtegida, Supabase y los estilos de AMAC. No se requieren tablas nuevas.
 
 1. Registrar una empresa ficticia desde Login → Empresa → Crear cuenta de empresa. Confirmar correo si corresponde.
-2. En Supabase SQL Editor, ejecutar `supabase/vacantes_ejemplo.sql` después de sustituir el correo de ejemplo por el de la empresa registrada. Carga seis vacantes ficticias activas sin duplicarlas si se repite con el mismo propietario.
+2. En Supabase SQL Editor, ejecutar `supabase/vacantes_ejemplo.sql` después de sustituir el correo de ejemplo por el de la empresa registrada. Carga seis vacantes ficticias sin duplicarlas si se repite con el mismo propietario. Tras la migración, aprobar la empresa y cada oferta desde el panel; solo entonces serán públicas.
 3. Desde la app publicar otra vacante con un teléfono de prueba autorizado y otra sin teléfono. Comprobar validaciones, conteo, pausa, reactivación y cierre. Mantener al menos seis vacantes activas para la entrega.
 4. Con un candidato aprobado, postularse; con la empresa revisar nombre, edad, colonia, experiencia y cambiar estatus. Comprobar que el candidato vea el cambio y no cancele una solicitud aceptada.
 5. Probar acceso cruzado de roles, empresa ajena, sesión cerrada, RLS y recarga de rutas. Verificar que la empresa no pueda modificar solicitudes canceladas.
 6. Completar cuentas de prueba verificadas, integrantes, URL Vercel, resultados, video y diapositivas.
 
-Decisiones: cerrar es definitivo desde el panel; el teléfono de contacto es opcional y se guarda solo si se activa la opción. No se incluyen funciones opcionales (logo, edición de perfil, administración). Los estados RF permanecen parciales hasta pruebas reales.
+Decisiones: cerrar es definitivo desde el panel; el teléfono de contacto es opcional y se guarda solo si se activa la opción. No se incluyen funciones opcionales (logo de empresa y edición de perfil). Los estados RF permanecen parciales hasta pruebas reales.
+
+## Módulo de administración y revisión previa
+
+Instalar exclusivamente `supabase/permisos_admin.sql` en SQL Editor como propietario del proyecto existente. No ejecutar de nuevo esquema.sql. Conserva usuarios y solicitudes, añade `revision` a perfiles y vacantes; todas las ofertas existentes no revisadas pasan a pendiente y las no cerradas a pausada. Los perfiles previamente aprobados conservan aprobación. Las empresas sin aprobación previa quedan pendientes. Los nuevos registros de candidatos y empresas requieren aprobación para postularse y publicar respectivamente; pueden iniciar sesión antes de ser aprobados. Confirmación de email es independiente.
+
+Rutas `/admin`, `/admin/candidatos`, `/admin/empresas`, `/admin/vacantes`, `/admin/solicitudes`. El rol admin se asigna solo por personal autorizado en Supabase. El administrador aprueba, rechaza, suspende y devuelve a revisión perfiles y ofertas; puede cerrar ofertas definitivamente. Una empresa suspendida pierde acceso a publicación y modificación de solicitudes; sus ofertas no cerradas quedan suspendidas y deben revisarse otra vez. Las empresas aprobadas pueden pausar y reactivar únicamente sus vacantes aprobadas; no pueden modificar la revisión. El administrador consulta solicitudes sin cambiar decisiones de contratación. No hay borrado permanente. Los candidatos conservan el acceso histórico a ofertas a las que ya postularon, pero no pueden postularse de nuevo si no están activas y aprobadas.
+
+Orden: hacer copia de seguridad, preparar los archivos en una rama, ejecutar el SQL y desplegar enseguida la versión nueva. Si se sube directamente a la rama publicada, habrá un breve intervalo de incompatibilidad hasta completar ambos pasos. Probar con cuentas ficticias y refrescar la sesión tras cambiar aprobación. Revisar en Supabase que no existan políticas permisivas adicionales ajenas al esquema entregado. No publicar contraseñas administrativas ni claves secretas.
+
+Pruebas pendientes: candidato sin aprobación no postula; empresa sin aprobación no publica; empresa aprobada envía oferta pendiente; visitante no la ve; admin aprueba y aparece; suspender oferta y comprobar que empresa no puede reactivarla; rechazar empresa y comprobar que sus ofertas dejan de ser públicas; probar cierre definitivo, solicitudes históricas y que usuarios no admin no ejecuten RPC administrativas ni alteren revision/rol directamente. Comprobar seis ofertas públicas y accesibilidad. No se han ejecutado estas pruebas en la base real.
