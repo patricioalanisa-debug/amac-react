@@ -109,3 +109,7 @@ main { padding-block: var(--espacio-l) var(--espacio-xxl); }
 @media (min-width: 1024px) {
   .dos-columnas { grid-template-columns: 2fr 1fr; align-items: start; }
 }
+/* Navegación móvil y barra de ayuda */
+body { padding-bottom: 5.5rem; }
+.barra-ayuda__interior { flex-wrap: wrap; align-items: center; gap: var(--espacio-s); }
+@media (min-width: 1024px) { body { padding-bottom: 0; } }
