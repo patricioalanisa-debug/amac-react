@@ -1,4 +1,10 @@
 # AMAC · Bolsa de trabajo
+## Integrantes y que hizo cada uno
+| Integrante | Qué hizo |
+|---|---|
+| Patricio Alanis | Creó el repositorio `amac-react` y la estructura del proyecto con Vite, el proyecto de Supabase y el script `supabase/esquema.sql` (tablas, trigger, funciones y RLS), la conexión con Supabase (`lib/supabase.js`), el despliegue en Vercel con variables de entorno y `vercel.json`, los estilos de la Entrega 2 en `src/styles`, y las páginas y componentes de vacantes: listado con búsqueda y filtros, detalle de vacante y `TarjetaVacante`. |
+| Isaí Rico | Sesión con `AuthContext` y `RutaProtegida`, `Encabezado` y `Pie`, registro de candidato, inicio y cierre de sesión, postularme, mis solicitudes y cancelar, limpieza de los estilos de la plantilla de Vite y conexión con Supabase Auth. |
+| Andrés Espinosa | Registro de empresa, publicar vacante, mis vacantes con pausar, reactivar y cerrar, solicitudes recibidas con cambio de estatus, y las cuentas de prueba de empresa. |
 ## Diagrama de base de datos
 
 ![Diagrama](img/diagrama.png)
