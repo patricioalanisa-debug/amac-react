@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabase";
 export default function RegistroCandidato() {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
+  const [exito, setExito] = useState("");
   const [enviando, setEnviando] = useState(false);
 
   async function enviar(evento) {
@@ -12,8 +13,10 @@ export default function RegistroCandidato() {
     setMensaje("");
     const f = new FormData(evento.currentTarget);
 
+    if (!["nombre", "correo", "telefono", "colonia"].every(k => String(f.get(k) ?? "").trim()) || !f.get("terminos")) return setMensaje("Completa los campos obligatorios y acepta los términos.");
+    if (String(f.get("clave")).length < 8) return setMensaje("La contraseña debe tener al menos 8 caracteres.");
     const edad = Number(f.get("edad"));
-    if (!(edad >= 18 && edad <= 120)) {
+    if (!Number.isInteger(edad) || !(edad >= 18 && edad <= 120)) {
       return setMensaje("Escribe una edad entre 18 y 120 años.");
     }
     if (f.get("clave") !== f.get("clave2")) {
@@ -27,16 +30,16 @@ export default function RegistroCandidato() {
     if (f.get("habilidades")) partes.push(`Habilidades: ${f.get("habilidades")}`);
 
     setEnviando(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: f.get("correo").trim(),
       password: f.get("clave"),
       options: {
         data: {
           rol: "candidato",
-          nombre: f.get("nombre"),
-          telefono: f.get("telefono"),
+          nombre: f.get("nombre").trim(),
+          telefono: f.get("telefono").trim(),
           edad,
-          colonia: f.get("colonia"),
+          colonia: f.get("colonia").trim(),
           experiencia: partes.join(". "),
         },
       },
@@ -51,9 +54,10 @@ export default function RegistroCandidato() {
           : "No pudimos crear tu cuenta. Revisa tus datos e inténtalo de nuevo."
       );
     }
-    navigate("/");
+    setExito(data.session ? "Tu cuenta fue creada. AMAC debe aprobarla antes de que puedas postularte." : "Revisa tu correo para confirmar tu cuenta. AMAC debe aprobarla antes de que puedas postularte.");
   }
 
+  if (exito) return <div className="contenedor contenedor--estrecho"><h1>Registro recibido</h1><p role="status" className="aviso">{exito}</p><button className="boton boton--primario" onClick={() => navigate("/", { replace: true })}>Ver vacantes</button></div>;
   return (
     <div className="contenedor contenedor--estrecho">
       <Link className="enlace-volver" to="/login">← Volver al inicio de sesión</Link>
@@ -94,36 +98,15 @@ export default function RegistroCandidato() {
           </div>
         </fieldset>
 
-        <fieldset className="grupo-campos">
-          <legend>Medio de contacto preferido</legend>
-          <div className="opcion">
-            <input type="radio" id="contacto-correo" name="contacto" value="correo" defaultChecked />
-            <label htmlFor="contacto-correo">Por correo</label>
-          </div>
-          <div className="opcion">
-            <input type="radio" id="contacto-telefono" name="contacto" value="telefono" />
-            <label htmlFor="contacto-telefono">Por teléfono</label>
-          </div>
-        </fieldset>
+
 
         <fieldset className="grupo-campos">
           <legend>Dirección</legend>
-          <div className="campo-formulario">
-            <label htmlFor="calle">Calle y número</label>
-            <input type="text" id="calle" name="calle" autoComplete="street-address" />
-          </div>
+
           <div className="campos-dobles">
             <div className="campo-formulario">
               <label htmlFor="colonia">Colonia</label>
               <input type="text" id="colonia" name="colonia" required />
-            </div>
-            <div className="campo-formulario">
-              <label htmlFor="municipio">Municipio</label>
-              <input type="text" id="municipio" name="municipio" autoComplete="address-level2" />
-            </div>
-            <div className="campo-formulario">
-              <label htmlFor="cp">Código postal</label>
-              <input type="text" id="cp" name="cp" inputMode="numeric" autoComplete="postal-code" />
             </div>
           </div>
         </fieldset>
@@ -149,10 +132,6 @@ export default function RegistroCandidato() {
             <label htmlFor="habilidades">Habilidades</label>
             <textarea id="habilidades" name="habilidades" />
             <p className="campo-formulario__ayuda">Ejemplo: atención a clientes, caja, computadora.</p>
-          </div>
-          <div className="campo-formulario">
-            <label htmlFor="curriculum">Currículum (PDF o Word)</label>
-            <input type="file" id="curriculum" name="curriculum" accept=".pdf,.doc,.docx" />
           </div>
         </fieldset>
 
