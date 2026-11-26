@@ -10,13 +10,14 @@ import RegistroCandidato from "./pages/RegistroCandidato";
 function App() {
   return (
     <>
-      <a className="saltar-contenido" href="#principal">Saltar al contenido</a>
       <Encabezado />
-      <main id="principal">
+      <main id="principal" tabIndex={-1}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/vacante/:id" element={<VacanteDetalle />} />
-          <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/vacante/:id" element={<VacanteDetalle />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/registro" element={<RegistroCandidato />} />
+          <Route path="*" element={<div className="contenedor"><h1>Página no encontrada</h1><p>Regresa al listado usando el menú.</p></div>} />
         </Routes>
       </main>
       <Pie />
