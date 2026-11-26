@@ -41,4 +41,53 @@ VITE_SUPABASE_ANON_KEY=TU_LLAVE_PUBLICA
 
 Usar únicamente la llave pública anon o publishable, nunca service_role ni secret key. No subir `.env.local`. Configurar las mismas variables en Vercel; el build es `npm run build` y la salida `dist`. `vercel.json` permite recargar las rutas de React. Configurar la URL publicada como Site URL en Supabase Auth.
 
-La URL real de Vercel, integrantes, cuentas de prueba, tabla RF, tecnologías y resultados de pruebas deben completarse en equipo con información verificada.
+## Tecnologías e integrantes
+
+React, Vite, React Router, Supabase (PostgreSQL, Auth, RLS), CSS y Vercel.
+
+- A: infraestructura, vacantes y seguridad. Nombre: pendiente.
+- B: registro, sesión y solicitudes del candidato. Nombre: pendiente.
+- C: flujo de empresa y datos de ejemplo. Nombre: pendiente.
+- URL pública Vercel: pendiente de confirmar.
+
+## Tabla de requerimientos (Entrega 3)
+
+🟡 = código implementado, pendiente de prueba real; ❌ = pendiente en la versión revisada. Marcar ✅ solo después de verificar.
+
+| RF | Funcionalidad | Estado |
+|---|---|---|
+| RF-001 | Listado de vacantes activas | 🟡 |
+| RF-002, RF-007 | Búsqueda y filtros | 🟡 |
+| RF-003, RF-051 | Detalle y llamada | 🟡 |
+| RF-011, RF-012, RF-013 | Registro de candidato | 🟡 |
+| RF-008, RF-009 | Inicio y cierre de sesión | 🟡 |
+| RF-004, RF-054 | Postulación y aprobación | 🟡 |
+| RF-005, RF-006 | Mis solicitudes y cancelación | 🟡 |
+| RF-015 | Registro de empresa | ❌ |
+| RF-019 | Publicar vacante | ❌ |
+| RF-020, RF-021 | Mis vacantes | ❌ |
+| RF-022, RF-024 | Solicitudes recibidas | ❌ |
+| RF-010 | Seguridad RLS | 🟡 |
+
+## Cuentas de prueba (pendientes de crear y verificar)
+
+| Rol | Correo de prueba | Contraseña de prueba |
+|---|---|---|
+| Candidato aprobado | Pendiente | Pendiente |
+| Candidato sin aprobar | Pendiente | Pendiente |
+| Empresa | Pendiente | Pendiente |
+
+Crear cuentas ficticias exclusivas de la demo, sin reutilizar credenciales personales. Confirmar sus correos si Auth lo requiere. El equipo autorizado debe marcar `aprobado = true` únicamente para el candidato de prueba aprobado desde Table Editor. Completar la tabla con las credenciales de demostración solicitadas por el profesor, sin publicar claves de administración ni llaves privadas.
+
+## Pruebas de A y B
+
+1. Como visitante, verificar listado, búsqueda, filtros y detalle.
+2. Registrar candidato y verificar que el trigger cree su perfil; comprobar confirmación de correo si está habilitada.
+3. Iniciar sesión como candidato sin aprobar: no debe poder postularse.
+4. Iniciar sesión como candidato aprobado: postularse a una vacante activa y confirmar que no puede duplicarla.
+5. En Mis solicitudes verificar empresa, fecha y estatus; cancelar una pendiente y comprobar que no se pueda cancelar una resuelta.
+6. Cerrar sesión y comprobar que /mis-solicitudes redirija a login. Verificar aislamiento entre cuentas y restricciones RLS con usuarios no administradores.
+7. Comprobar alto contraste, teclado, móvil y Lighthouse (accesibilidad ≥ 90).
+8. Verificar compilación, URL pública, recarga de rutas y seis vacantes de ejemplo cuando C las cargue.
+
+Pendientes: resultados reales, URL de Vercel, video y diapositivas. Al integrar C, actualizar rutas, tabla RF y pruebas.
