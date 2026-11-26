@@ -15,6 +15,12 @@ import EmpresaVacantes from "./pages/EmpresaVacantes";
 import PublicarVacante from "./pages/PublicarVacante";
 import SolicitudesRecibidas from "./pages/SolicitudesRecibidas";
 
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminCandidatos from "./pages/AdminCandidatos";
+import AdminEmpresas from "./pages/AdminEmpresas";
+import AdminVacantes from "./pages/AdminVacantes";
+import AdminSolicitudes from "./pages/AdminSolicitudes";
+
 function App() {
   return (
     <>
@@ -29,6 +35,11 @@ function App() {
           <Route path="/empresa/vacantes" element={<RutaProtegida rol="empresa"><EmpresaVacantes /></RutaProtegida>} />
           <Route path="/empresa/publicar" element={<RutaProtegida rol="empresa"><PublicarVacante /></RutaProtegida>} />
           <Route path="/empresa/solicitudes" element={<RutaProtegida rol="empresa"><SolicitudesRecibidas /></RutaProtegida>} />
+          <Route path="/admin" element={<RutaProtegida rol="admin"><AdminDashboard /></RutaProtegida>} />
+          <Route path="/admin/candidatos" element={<RutaProtegida rol="admin"><AdminCandidatos /></RutaProtegida>} />
+          <Route path="/admin/empresas" element={<RutaProtegida rol="admin"><AdminEmpresas /></RutaProtegida>} />
+          <Route path="/admin/vacantes" element={<RutaProtegida rol="admin"><AdminVacantes /></RutaProtegida>} />
+          <Route path="/admin/solicitudes" element={<RutaProtegida rol="admin"><AdminSolicitudes /></RutaProtegida>} />
           <Route path="*" element={<div className="contenedor"><h1>Página no encontrada</h1><p>Regresa al listado usando el menú.</p></div>} />
           <Route path="/mis-solicitudes" element={ <RutaProtegida rol="candidato"> <MisSolicitudes /> </RutaProtegida>}/>
         </Routes>
