@@ -1,5 +1,4 @@
 # AMAC · Bolsa de trabajo
-
 ## Diagrama de base de datos
 
 ![Diagrama](img/diagrama.png)
@@ -59,10 +58,10 @@ React, Vite, React Router, Supabase (PostgreSQL, Auth, RLS), CSS y Vercel.
 | RF-001 | Listado de vacantes activas | 🟡 |
 | RF-002, RF-007 | Búsqueda y filtros | 🟡 |
 | RF-003, RF-051 | Detalle y llamada | 🟡 |
-| RF-011, RF-012, RF-013 | Registro de candidato | 🟡 |
-| RF-008, RF-009 | Inicio y cierre de sesión | 🟡 |
-| RF-004, RF-054 | Postulación y aprobación | 🟡 |
-| RF-005, RF-006 | Mis solicitudes y cancelación | 🟡 |
+| RF-011, RF-012, RF-013 | Registro de candidato | ✅ |
+| RF-008, RF-009 | Inicio y cierre de sesión | ✅ |
+| RF-004, RF-054 | Postulación y aprobación | ✅ |
+| RF-005, RF-006 | Mis solicitudes y cancelación | ✅ |
 | RF-015 | Registro de empresa | 🟡 |
 | RF-019 | Publicar vacante | 🟡 |
 | RF-020, RF-021 | Mis vacantes | 🟡 |
