@@ -79,3 +79,5 @@ img { display: block; max-width: 100%; height: auto; }
   font-size: var(--texto-base);
   color: var(--color-texto-suave);
 }
+html { scroll-padding-bottom: 6rem; }
+#principal:focus { outline-offset: -3px; }

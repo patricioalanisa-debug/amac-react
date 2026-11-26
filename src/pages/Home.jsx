@@ -7,28 +7,33 @@ function Home() {
   const [busqueda, setBusqueda] = useState("");
   const [horario, setHorario] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [cargando, setCargando] = useState(true);
+  const [mensajeError, setMensajeError] = useState("");
 
   useEffect(() => {
-    const cargarVacantes = async () => {
-      const { data, error } = await supabase
-        .from("vacantes")
-        .select("*")
-        .eq("estado", "activa");
-
-      if (error) {
-        console.log(error);
-      } else {
-        setVacantes(data);
-      }
-    };
-
+    let vigente = true;
+    async function cargarVacantes() {
+      try {
+        const { data, error } = await supabase.from("vacantes")
+          .select("*, empresa:perfiles(nombre)")
+          .eq("estado", "activa").order("creada_en", { ascending: false });
+        if (error) throw error;
+        if (vigente) setVacantes(data ?? []);
+      } catch (error) {
+        console.error(error);
+        if (vigente) setMensajeError("No pudimos cargar las vacantes. Intenta recargar la página.");
+      } finally { if (vigente) setCargando(false); }
+    }
     cargarVacantes();
+    return () => { vigente = false; };
   }, []);
+
+  const categorias = [...new Set(vacantes.map(v => v.categoria))].sort((a,b) => a.localeCompare(b, "es"));
 
   const vacantesFiltradas = vacantes.filter((vacante) => {
     const coincideBusqueda =
-      vacante.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
-      vacante.ubicacion.toLowerCase().includes(busqueda.toLowerCase());
+      vacante.titulo.toLowerCase().includes(busqueda.trim().toLowerCase()) ||
+      vacante.ubicacion.toLowerCase().includes(busqueda.trim().toLowerCase());
 
     const coincideHorario =
       horario === "" || vacante.horario === horario;
@@ -40,7 +45,7 @@ function Home() {
   });
 
   return (
-    <main id="principal">
+    <div>
       <div className="contenedor">
         <h1>Vacantes disponibles</h1>
         <p className="subtitulo">
@@ -94,22 +99,15 @@ function Home() {
                   onChange={(e) => setCategoria(e.target.value)}
                 >
                   <option value="">Todas las categorías</option>
-                  <option value="Administración">
-                    Administración
-                  </option>
-                  <option value="Atención al cliente">
-                    Atención al cliente
-                  </option>
-                  <option value="Alimentos">Alimentos</option>
-                  <option value="Transporte">Transporte</option>
+                  {categorias.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
             </div>
           </fieldset>
         </div>
 
-        {vacantesFiltradas.length === 0 ? (
-          <p>No hay vacantes para mostrar</p>
+        {cargando ? <p role="status">Cargando vacantes…</p> : mensajeError ? <p role="alert" className="aviso">{mensajeError}</p> : vacantesFiltradas.length === 0 ? (
+          <p role="status">No hay vacantes para mostrar</p>
         ) : (
           <section
             className="lista-tarjetas"
@@ -124,7 +122,7 @@ function Home() {
           </section>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 

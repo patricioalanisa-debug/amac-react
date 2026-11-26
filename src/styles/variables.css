@@ -41,3 +41,17 @@
     --texto-h2: 1.75rem;
   }
 }
+:root { --alto-toque-min: 2.75rem; --color-blanco: #fff; --color-texto-sobre-primario: #fff; --color-borde-tarjeta: transparent; }
+:root[data-contraste="alto"] {
+  --color-primario: #000000;
+  --color-primario-oscuro: #000000;
+  --color-acento: #ffd400;
+  --color-acento-claro: #ffe566;
+  --color-azul-claro: #ffffff;
+  --color-durazno: #ffffff;
+  --color-texto: #000000;
+  --color-texto-suave: #000000;
+  --color-foco: #000000;
+  --color-foco-oscuro: #ffd400;
+  --color-borde-tarjeta: #000000;
+}
