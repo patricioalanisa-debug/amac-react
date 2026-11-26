@@ -20,10 +20,6 @@ function App() {
           <Route path="/vacante/:id" element={<VacanteDetalle />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<RegistroCandidato />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/vacante/:id" element={<VacanteDetalle />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<RegistroCandidato />} />
           <Route path="*" element={<div className="contenedor"><h1>Página no encontrada</h1><p>Regresa al listado usando el menú.</p></div>} />
           <Route path="/mis-solicitudes" element={ <RutaProtegida rol="candidato"> <MisSolicitudes /> </RutaProtegida>}/>
         </Routes>
