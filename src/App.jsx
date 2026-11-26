@@ -17,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/vacante/:id" element={<VacanteDetalle />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<RegistroCandidato />} />
         </Routes>
       </main>
       <Pie />

@@ -7,7 +7,6 @@ export default function Login() {
   const [mensaje, setMensaje] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  // Un solo manejador para los tres formularios (candidato, empresa y administrador)
   async function iniciarSesion(evento) {
     evento.preventDefault();
     setMensaje("");
@@ -20,7 +19,7 @@ export default function Login() {
     });
     if (error) {
       setEnviando(false);
-      setMensaje("Correo o contraseña incorrectos."); // no decir cuál falló
+      setMensaje("Correo o contraseña incorrectos."); 
       return;
     }
 
