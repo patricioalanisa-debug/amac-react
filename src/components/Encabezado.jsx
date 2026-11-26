@@ -32,7 +32,7 @@ export default function Encabezado() {
     { ruta: "/registro", texto: "Registrarme", icono: "documento" }
   );
   if (!cargando && perfil?.rol === "candidato") enlaces.push({ ruta: "/mis-solicitudes", texto: "Mis solicitudes", icono: "lista" });
-  // Integrar rutas de empresa cuando C las publique.
+  if (!cargando && perfil?.rol === "empresa") enlaces.push({ ruta: "/empresa/vacantes", texto: "Mis vacantes", icono: "edificio" }, { ruta: "/empresa/solicitudes", texto: "Solicitudes", icono: "lista" });
   return <>
     <a className="saltar-contenido" href="#principal">Saltar al contenido</a>
     <div className="barra-ayuda"><div className="contenedor barra-ayuda__interior">
