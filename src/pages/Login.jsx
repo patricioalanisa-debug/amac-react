@@ -23,14 +23,20 @@ export default function Login() {
       return;
     }
 
-    const { data: perfil } = await supabase
+    const { data: perfil, error: errorPerfil } = await supabase
       .from("perfiles")
       .select("rol")
       .eq("id", data.user.id)
       .single();
+    if (errorPerfil || !perfil || perfil.rol !== formulario.get("rol")) {
+      const { error: salida } = await supabase.auth.signOut();
+      setEnviando(false);
+      setMensaje(salida ? "No pudimos cerrar la sesión. Intenta nuevamente." : "No pudimos iniciar sesión con ese tipo de cuenta.");
+      return;
+    }
     setEnviando(false);
 
-    const destinos = { candidato: "/mis-solicitudes", empresa: "/empresa/vacantes", admin: "/" };
+    const destinos = { candidato: "/mis-solicitudes", empresa: "/", admin: "/" };
     navigate(destinos[perfil?.rol] ?? "/");
   }
 
@@ -57,6 +63,7 @@ export default function Login() {
         <section className="panel panel-candidato" aria-labelledby="titulo-candidato">
           <h2 id="titulo-candidato">Entrar como candidato</h2>
           <form onSubmit={iniciarSesion}>
+            <input type="hidden" name="rol" value="candidato" />
             <div className="campo-formulario">
               <label htmlFor="candidato-correo">Correo electrónico</label>
               <input type="email" id="candidato-correo" name="correo" autoComplete="email" required />
@@ -71,7 +78,6 @@ export default function Login() {
               <button className="boton boton--primario boton--bloque" type="submit" disabled={enviando}>
                 {enviando ? "Entrando…" : "Entrar"}
               </button>
-              <button className="boton boton--secundario boton--bloque" type="button">Entrar con Google</button>
               <Link className="boton boton--acento boton--bloque" to="/registro">Crear cuenta de candidato</Link>
             </div>
           </form>
@@ -83,6 +89,7 @@ export default function Login() {
         <section className="panel panel-empresa" aria-labelledby="titulo-empresa">
           <h2 id="titulo-empresa">Entrar como empresa</h2>
           <form onSubmit={iniciarSesion}>
+            <input type="hidden" name="rol" value="empresa" />
             <div className="campo-formulario">
               <label htmlFor="empresa-correo">Correo de la empresa</label>
               <input type="email" id="empresa-correo" name="correo" autoComplete="email" required />
@@ -108,6 +115,7 @@ export default function Login() {
           <h2 id="titulo-admin">Entrar como administrador</h2>
           <p>Solo para el equipo de AMAC.</p>
           <form onSubmit={iniciarSesion}>
+            <input type="hidden" name="rol" value="admin" />
             <div className="campo-formulario">
               <label htmlFor="admin-correo">Correo institucional</label>
               <input type="email" id="admin-correo" name="correo" autoComplete="email" required />
@@ -131,8 +139,8 @@ export default function Login() {
           <p>Puedes entrar sin crear una cuenta y:</p>
           <ul>
             <li>Ver las vacantes disponibles</li>
-            <li>Conocer a AMAC</li>
-            <li>Revisar los perfiles de las empresas</li>
+            <li>Consultar los detalles de las ofertas</li>
+            <li>Consultar el nombre de las empresas</li>
           </ul>
           <div className="acciones">
             <Link className="boton boton--primario boton--bloque" to="/">Entrar como visitante</Link>
