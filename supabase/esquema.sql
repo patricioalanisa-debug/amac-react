@@ -190,7 +190,9 @@ ALTER TABLE public.solicitudes ENABLE ROW LEVEL SECURITY;
 
 GRANT SELECT
 ON public.perfiles
-TO authenticated;
+TO anon, authenticated;
+
+REVOKE UPDATE ON public.perfiles FROM anon, authenticated;
 
 GRANT UPDATE (
     nombre,
@@ -216,6 +218,8 @@ TO authenticated;
 GRANT SELECT, INSERT
 ON public.solicitudes
 TO authenticated;
+
+REVOKE UPDATE ON public.solicitudes FROM anon, authenticated;
 
 GRANT UPDATE (estatus)
 ON public.solicitudes
@@ -304,6 +308,7 @@ WITH CHECK (
     candidato_id = auth.uid()
     AND estatus = 'Enviada'
     AND public.candidato_aprobado()
+    AND EXISTS (SELECT 1 FROM public.vacantes v WHERE v.id = vacante_id AND v.estado = 'activa')
 );
 
 CREATE POLICY "Candidato cancela si no está resuelta"
