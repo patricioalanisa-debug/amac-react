@@ -24,7 +24,7 @@ export default function BotonPostularme({ vacanteId, estado }) {
   }, [esCandidato, usuarioId, vacanteId, clave]);
   const lista = consulta.clave === clave;
   const yaAplico = lista && consulta.aplicado;
-  const permitido = lista && !consulta.error && !yaAplico && perfil?.aprobado && estado === "activa";
+  const permitido = lista && !consulta.error && !yaAplico && perfil?.aprobado && perfil?.revision === "aprobada" && estado === "activa";
   async function postularme() {
     if (!permitido || enviando) return;
     setEnviando(true); setMensaje("");
@@ -44,7 +44,7 @@ export default function BotonPostularme({ vacanteId, estado }) {
   if (!lista) return <p role="status">Consultando solicitud…</p>;
   return <div className="acciones">
     {yaAplico ? <Link className="boton boton--secundario boton--bloque" to="/mis-solicitudes">Ver mis solicitudes</Link> : <button className="boton boton--primario boton--bloque" type="button" onClick={postularme} disabled={!permitido || enviando}>{enviando ? "Enviando…" : "Postularme"}</button>}
-    {!yaAplico && !perfil.aprobado && <p>Tu cuenta está pendiente de aprobación de AMAC.</p>}
+    {!yaAplico && (!perfil.aprobado || perfil.revision !== "aprobada") && <p>Tu cuenta requiere aprobación de AMAC. Estado: {perfil.revision ?? "pendiente"}.</p>}
     {!yaAplico && estado !== "activa" && <p>Esta vacante no está activa.</p>}
     {consulta.error && <p role="alert">{consulta.error}</p>}
     {mensaje && <p role="status">{mensaje}</p>}

@@ -33,6 +33,7 @@ export default function Encabezado() {
   );
   if (!cargando && perfil?.rol === "candidato") enlaces.push({ ruta: "/mis-solicitudes", texto: "Mis solicitudes", icono: "lista" });
   if (!cargando && perfil?.rol === "empresa") enlaces.push({ ruta: "/empresa/vacantes", texto: "Mis vacantes", icono: "edificio" }, { ruta: "/empresa/solicitudes", texto: "Solicitudes", icono: "lista" });
+  if (!cargando && perfil?.rol === "admin") enlaces.push({ ruta: "/admin", texto: "Administración", icono: "escudo" });
   return <>
     <a className="saltar-contenido" href="#principal">Saltar al contenido</a>
     <div className="barra-ayuda"><div className="contenedor barra-ayuda__interior">
