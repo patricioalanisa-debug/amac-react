@@ -36,10 +36,6 @@ export default function Encabezado() {
   if (!cargando && perfil?.rol === "admin") enlaces.push({ ruta: "/admin", texto: "Administración", icono: "escudo" });
   return <>
     <a className="saltar-contenido" href="#principal">Saltar al contenido</a>
-    <div className="barra-ayuda"><div className="contenedor barra-ayuda__interior">
-      <a className="barra-ayuda__telefono" href="tel:+528110223344"><span className="icono icono--telefono" aria-hidden="true" />¿Necesitas ayuda? Llama a AMAC: (81) 1022 3344</a>
-      <button className="boton boton--secundario boton--chico" id="boton-contraste" type="button" aria-pressed={contraste} onClick={() => setContraste(v => !v)}>Alto contraste</button>
-    </div></div>
     <header className="encabezado"><div className="contenedor encabezado__interior">
       <Link className="logo" to="/"><img src="/isotipo.svg" alt="" width="62" height="31" /><span className="logo__texto"><span className="logo__nombre">AMAC</span><span className="logo__sub">Bolsa de trabajo</span></span></Link>
       <nav className="menu" aria-label="Navegación principal"><ul className="menu__lista">
@@ -47,6 +43,7 @@ export default function Encabezado() {
         {sesion && <li><button className="menu__enlace menu__salir" type="button" onClick={cerrarSesion} disabled={cerrando}><span className="menu__icono"><span className="icono icono--usuario" aria-hidden="true" /></span><span className="menu__texto">{cerrando ? "Saliendo…" : "Cerrar sesión"}</span></button></li>}
       </ul></nav>
       {perfil && <p className="encabezado__rol">{perfil.nombre}</p>}
+      <button className="boton boton--secundario boton--chico" id="boton-contraste" type="button" aria-pressed={contraste} onClick={() => setContraste(v => !v)} style={{ backgroundColor: "transparent", color: "inherit", borderColor: "currentColor", flexShrink: 0, maxWidth: "100%", whiteSpace: "normal" }}>Alto contraste</button>
     </div>{errorSalida && <p className="aviso" role="alert">{errorSalida}</p>}</header>
   </>;
 }
