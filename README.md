@@ -65,9 +65,9 @@ Completar con cuentas ficticias reales y verificadas. No usar contraseñas perso
 
 | Rol | Correo | Contraseña | Revisión |
 |---|---|---|---|
-| Candidato aprobado | candidato@example.com | [contraseña de prueba] | aprobada |
-| Candidato sin aprobar | candidato2@example.com | [contraseña de prueba] | pendiente |
-| Empresa | empresa2@example.com | [contraseña de prueba] | aprobada |
+| Candidato aprobado | candidato@example.com | [12345678] | aprobada |
+| Candidato sin aprobar | candidato2@example.com | [12345678] | pendiente |
+| Empresa | empresa2@example.com | [12345678] | aprobada |
 
 La cuenta administrativa se comparte solo por canal privado si se requiere. La confirmación de correo es independiente de la revisión administrativa. En demo el profesor permite desactivarla temporalmente; para producción debe activarse y configurarse un SMTP apropiado.
 
