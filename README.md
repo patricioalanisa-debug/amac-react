@@ -113,19 +113,19 @@ Permisos por columna limitan las actualizaciones: perfil sin rol/aprobación/rev
 | RF | Funcionalidad | Estado |
 |---|---|---|
 | RF-001 | Listado de vacantes reales | ✅ |
-| RF-002, RF-007 | Búsqueda y filtros; mensaje sin resultados | 🟡 |
-| RF-003, RF-051 | Detalle y enlace tel condicional | 🟡 |
-| RF-011, RF-012, RF-013 | Registro candidato, validación y términos | 🟡 |
+| RF-002, RF-007 | Búsqueda y filtros; mensaje sin resultados | ✅ |
+| RF-003, RF-051 | Detalle y enlace tel condicional | ✅ |
+| RF-011, RF-012, RF-013 | Registro candidato, validación y términos | ✅ |
 | RF-008, RF-009 | Inicio y cierre de sesión | ✅ |
-| RF-004, RF-054 | Postulación, aprobación y bloqueo duplicado | 🟡 |
-| RF-005, RF-006 | Mis solicitudes y cancelación | 🟡 |
-| RF-015 | Registro de empresa | 🟡 |
-| RF-019 | Publicar vacante y teléfono condicional | 🟡 |
-| RF-020, RF-021 | Mis vacantes, conteo, pausa, reactivar, cerrar | 🟡 |
-| RF-022, RF-024 | Solicitudes recibidas y cambio de estatus | 🟡 |
-| RF-010 | Rutas y RLS | 🟡 |
+| RF-004, RF-054 | Postulación, aprobación y bloqueo duplicado | ✅ |
+| RF-005, RF-006 | Mis solicitudes y cancelación | ✅ |
+| RF-015 | Registro de empresa | ✅ |
+| RF-019 | Publicar vacante y teléfono condicional | ✅ |
+| RF-020, RF-021 | Mis vacantes, conteo, pausa, reactivar, cerrar | ✅ |
+| RF-022, RF-024 | Solicitudes recibidas y cambio de estatus | ✅ |
+| RF-010 | Rutas y RLS | ✅ |
 | RF-054 (extra) | Panel administrativo | ✅ |
-| Extra | Revisión de empresas y ofertas | 🟡 |
+| Extra | Revisión de empresas y ofertas | ✅ |
 | RF-014/RF-017, RF-016, RF-041, RF-029, RF-055 | Edición perfil, logo, favoritas, recuperación, etapas | ❌ (opcionales; no comprobados) |
 
 ## Accesibilidad y pruebas
