@@ -1,121 +1,144 @@
-# AMAC · Bolsa de trabajo
-## Integrantes y que hizo cada uno
-| Integrante | Qué hizo |
+# AMAC | Bolsa de trabajo
+
+**OT2026-WEB · Entrega 3 final** — Plataforma de empleo de asociAMayores A.C. orientada a facilitar el acceso de adultos mayores a oportunidades laborales y a conectar candidatos con empresas. AMAC supervisa los registros y las ofertas mediante el panel administrativo.
+
+- [Aplicación pública en Vercel](https://amac-react-chi.vercel.app/)
+- [Repositorio amac-react](https://github.com/patricioalanisa-debug/amac-react/tree/base)
+- [Diapositivas](presentacion/AMAC_presentacion.pdf)
+- Video: **PENDIENTE — pegar enlace accesible después de grabar.**
+
+## Integrantes y aportaciones
+
+| Integrante | Responsabilidad |
 |---|---|
-| Patricio Alanis | Creó el repositorio `amac-react` y la estructura del proyecto con Vite, el proyecto de Supabase y el script `supabase/esquema.sql` (tablas, trigger, funciones y RLS), la conexión con Supabase (`lib/supabase.js`), el despliegue en Vercel con variables de entorno y `vercel.json`, los estilos de la Entrega 2 en `src/styles`, y las páginas y componentes de vacantes: listado con búsqueda y filtros, detalle de vacante y `TarjetaVacante`. |
-| Isaí Rico | Sesión con `AuthContext` y `RutaProtegida`, `Encabezado` y `Pie`, registro de candidato, inicio y cierre de sesión, postularme, mis solicitudes y cancelar, limpieza de los estilos de la plantilla de Vite y conexión con Supabase Auth. |
-| Andrés Espinosa | Registro de empresa, publicar vacante, mis vacantes con pausar, reactivar y cerrar, solicitudes recibidas con cambio de estatus, y las cuentas de prueba de empresa. |
-## Diagrama de base de datos
+| Patricio Alanís Álvarez | Infraestructura, conexión a Supabase, listado, búsqueda, filtros, detalle de vacantes, despliegue y modelo de datos. |
+| Isaí Rico | Registro de candidato, sesión, postulaciones, mis solicitudes y cancelación. |
+| Andrés Espinosa García | Registro de empresa, publicación y gestión de vacantes, solicitudes recibidas y ejemplos. Integración del panel de aprobación y mejoras visuales, según aportaciones reales. |
 
-![Diagrama](img/diagrama.png)
+Distribución propuesta según las partes A, B y C; confirmar con el historial de commits.
 
-- `perfiles`: información de usuarios, rol y aprobación. Su ID referencia a `auth.users.id`.
-- `vacantes`: ofertas laborales; `empresa_id` referencia al perfil de la empresa (uno a muchos).
-- `solicitudes`: postulaciones; `vacante_id` y `candidato_id` referencian la vacante y el perfil. La restricción `UNIQUE (vacante_id, candidato_id)` evita duplicados.
-- El trigger `al_crear_usuario` crea el perfil al registrarse mediante Supabase Auth. Las contraseñas no se guardan en estas tablas.
+## Tecnologías
 
-## Seguridad RLS (RF-010)
+React (componentes, props, estado y efectos), Vite (desarrollo y build), React Router (SPA y rutas protegidas), CSS (responsividad y alto contraste), Supabase (PostgreSQL, Auth, API y RLS), GitHub (control de versiones) y Vercel (hosting HTTPS y despliegue continuo).
 
-RLS se activa en las tres tablas. PostgreSQL comprueba las reglas incluso si se manipula el frontend. Las funciones auxiliares consultan el rol, aprobación y relaciones sin recursión de políticas.
+## Instalación local
 
-| Tabla | Política | Explicación |
-|---|---|---|
-| perfiles | Cada quien ve su perfil | Solo el propietario puede leer su propio perfil, además de las excepciones siguientes. |
-| perfiles | Todos ven los perfiles de empresas | Permite mostrar el nombre de la empresa, también a visitantes. |
-| perfiles | La empresa ve a quien aplicó a sus vacantes | Limita la lectura de candidatos a quienes solicitaron sus ofertas. |
-| perfiles | Cada quien edita su perfil | Solo su propia fila; los permisos por columna impiden cambiar rol o aprobación. |
-| vacantes | Ver vacantes activas o las propias | El público ve activas; la empresa puede ver las suyas en cualquier estado. |
-| vacantes | El candidato sigue viendo las vacantes a las que aplicó | Permite consultar la oferta incluso si fue pausada o cerrada. |
-| vacantes | Solo empresas publican, a su nombre | Comprueba rol de empresa y propietario. |
-| vacantes | La empresa edita sus vacantes | Limita actualización a las propias. |
-| solicitudes | Candidato ve las suyas; empresa ve las de sus vacantes | Restringe lectura a las partes relacionadas. |
-| solicitudes | Solo candidatos aprobados se postulan | Comprueba identidad, aprobación, estatus inicial y vacante activa. |
-| solicitudes | Candidato cancela si no está resuelta | Solo Enviada o En revisión pueden pasar a Cancelada. |
-| solicitudes | Empresa cambia el estatus | Solo solicitudes de sus ofertas, no canceladas, a En revisión, Aceptada o Rechazada. |
+Usar Node.js 22.12+ de la serie 22 o Node.js 24 LTS. Clonar el repositorio y seleccionar la rama entregada:
 
-Los permisos de actualización de solicitudes se limitan a `estatus`. La aprobación se cambia desde el Table Editor por el equipo autorizado o desde el panel admin tras instalar su migración. `supabase/esquema.sql` describe una instalación nueva; `supabase/correcciones_parte_a.sql` aplica los ajustes a la base existente.
+```bash
+git clone https://github.com/patricioalanisa-debug/amac-react.git
+cd amac-react
+git checkout base
+npm install
+```
 
-## Configuración local y despliegue (parte A)
-
-Usar Node.js 22.12 o superior dentro de la serie 22, o una versión compatible posterior. Ejecutar `npm install`, configurar `.env.local` y ejecutar `npm run dev`.
+Crear `.env.local` en la raíz usando `.env.example` como plantilla. Solicitar al equipo la URL del proyecto y la llave pública (anon o publishable).
 
 ```dotenv
 VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
 VITE_SUPABASE_ANON_KEY=TU_LLAVE_PUBLICA
 ```
 
-Usar únicamente la llave pública anon o publishable, nunca service_role ni secret key. No subir `.env.local`. Configurar las mismas variables en Vercel; el build es `npm run build` y la salida `dist`. `vercel.json` permite recargar las rutas de React. Configurar la URL publicada como Site URL en Supabase Auth.
+El nombre ANON_KEY coincide con `src/lib/supabase.js` en la versión revisada. No colocar llaves privadas ni credenciales SMTP en React.
 
-## Tecnologías e integrantes
+```bash
+npm run dev
+npm run build
+```
 
-React, Vite, React Router, Supabase (PostgreSQL, Auth, RLS), CSS y Vercel.
+Abrir la URL local mostrada por Vite. En Vercel configurar las mismas variables públicas; build `npm run build`, salida `dist`. `vercel.json` redirige las rutas SPA a `index.html`. En Supabase, Site URL apunta al dominio publicado. La rama efectiva de producción y el historial de commits deben verificarse en Vercel/GitHub.
 
-- A: infraestructura, vacantes y seguridad. Nombre: pendiente.
-- B: registro, sesión y solicitudes del candidato. Nombre: pendiente.
-- C: flujo de empresa y datos de ejemplo. Nombre: pendiente.
-- URL pública Vercel: pendiente de confirmar.
+## Arquitectura y rutas
 
-## Tabla de requerimientos (Entrega 3)
+`main.jsx` monta BrowserRouter y AuthProvider; `App.jsx` define las rutas y usa Encabezado, Pie y RutaProtegida. `Home` consulta vacantes y utiliza TarjetaVacante. `AuthContext` mantiene sesión y perfil. `src/lib/supabase.js` conecta el cliente con la API.
 
-🟡 = código implementado, pendiente de prueba real; ❌ = pendiente en la versión revisada. Marcar ✅ solo después de verificar.
+| Rol | Rutas principales |
+|---|---|
+| Público | `/`, `/vacante/:id`, `/login`, `/registro`, `/registro-empresa` |
+| Candidato | `/mis-solicitudes` |
+| Empresa | `/empresa/vacantes`, `/empresa/publicar`, `/empresa/solicitudes` |
+| Administrador | `/admin`, `/admin/candidatos`, `/admin/empresas`, `/admin/vacantes`, `/admin/solicitudes` |
+
+## Cuentas de prueba
+
+Completar con cuentas ficticias reales y verificadas. No usar contraseñas personales, ni publicar credenciales administrativas. Si el repositorio es público, entregar las contraseñas de prueba al profesor en un canal privado o usar un repositorio privado accesible al profesor; limitar privilegios y rotar credenciales después de la evaluación.
+
+| Rol | Correo | Contraseña | Revisión |
+|---|---|---|---|
+| Candidato aprobado | candidato@example.com | [contraseña de prueba] | aprobada |
+| Candidato sin aprobar | candidato2@example.com | [contraseña de prueba] | pendiente |
+| Empresa | empresa2@example.com | [contraseña de prueba] | aprobada |
+
+La cuenta administrativa se comparte solo por canal privado si se requiere. La confirmación de correo es independiente de la revisión administrativa. En demo el profesor permite desactivarla temporalmente; para producción debe activarse y configurarse un SMTP apropiado.
+
+## Modelo relacional
+
+![Captura del Schema Visualizer](img/diagrama.png)
+
+La captura incluida corresponde a una versión anterior del esquema. Sustituirla por una captura actual de Database → Schema Visualizer antes de entregar.
+
+- `perfiles`: PK UUID vinculada a `auth.users.id`; rol, datos del usuario, `aprobado` y `revision`.
+- `vacantes`: PK bigint; `empresa_id` FK a perfiles; datos de empleo, teléfono opcional, estado y revisión.
+- `solicitudes`: PK bigint; `vacante_id` y `candidato_id` son FKs; fecha y estatus. `UNIQUE(vacante_id,candidato_id)` impide duplicar postulaciones.
+- `al_crear_usuario` ejecuta `crear_perfil()` al registrar un usuario en Auth. El registro público no asigna admin. Los estados de revisión son pendiente, aprobada, rechazada y suspendida.
+
+## Seguridad RLS (RF-010)
+
+Políticas de la versión SQL reconstruida. RLS se activa en las tres tablas. Revisar las políticas contra la base real y comprobar con cuentas no administrativas; SQL Editor por sí solo no demuestra el aislamiento.
+
+| Tabla | Política | Propósito |
+|---|---|---|
+| perfiles | Cada quien ve su perfil | Lectura del propietario. |
+| perfiles | Todos ven los perfiles de empresas | Lectura de perfiles de empresa para el listado público; revisar minimización de datos. |
+| perfiles | La empresa ve a quien aplicó a sus vacantes | Lectura de candidatos relacionados con sus ofertas. |
+| perfiles | Cada quien edita su perfil | Actualización de campos permitidos en su propia fila. |
+| perfiles | Admin lee perfiles | Lectura administrativa. |
+| vacantes | Ver vacantes activas o las propias | Público: activa, aprobada y empresa aprobada; propietario: sus ofertas. |
+| vacantes | El candidato sigue viendo las vacantes a las que aplicó | Conserva acceso histórico. |
+| vacantes | Solo empresas publican, a su nombre | Empresa aprobada; inserción propia, pausada y pendiente. |
+| vacantes | La empresa edita sus vacantes | Empresa aprobada, oferta propia aprobada y no cerrada; cambio de estado permitido. |
+| vacantes | Admin lee vacantes | Lectura administrativa de todas las ofertas. |
+| solicitudes | Candidato ve las suyas; empresa ve las de sus vacantes | Lectura de las partes relacionadas. |
+| solicitudes | Solo candidatos aprobados se postulan | Identidad propia, Enviada, candidato y oferta aprobados, empresa aprobada, estado activo. |
+| solicitudes | Candidato cancela si no está resuelta | Solo Enviada o En revisión pasan a Cancelada. |
+| solicitudes | Empresa cambia el estatus | Empresa aprobada y propietaria; no canceladas; En revisión, Aceptada o Rechazada. |
+| solicitudes | Admin lee solicitudes | Consulta administrativa, sin decidir contrataciones. |
+
+Permisos por columna limitan las actualizaciones: perfil sin rol/aprobación/revisión; vacante solo estado por cliente; solicitud solo estatus. Las RPC `admin_revisar_perfil`, `admin_revisar_vacante`, `admin_cerrar_vacante` verifican el rol admin en PostgreSQL y son el canal de moderación. Suspender una empresa suspende sus ofertas abiertas. Las rutas protegidas son una barrera de interfaz; RLS y permisos de PostgreSQL son la protección real. No almacenar contraseñas en tablas públicas.
+
+## Requerimientos funcionales
+
+✅ = demostrado en capturas o confirmado de forma general por el equipo; 🟡 = implementado en archivos revisados, faltan casos de aceptación específicos; ❌ = no incluido en esta versión revisada. Confirmar cada prueba antes de entregar.
 
 | RF | Funcionalidad | Estado |
 |---|---|---|
-| RF-001 | Listado de vacantes activas | 🟡 |
-| RF-002, RF-007 | Búsqueda y filtros | 🟡 |
-| RF-003, RF-051 | Detalle y llamada | 🟡 |
-| RF-011, RF-012, RF-013 | Registro de candidato | ✅ |
+| RF-001 | Listado de vacantes reales | ✅ |
+| RF-002, RF-007 | Búsqueda y filtros; mensaje sin resultados | 🟡 |
+| RF-003, RF-051 | Detalle y enlace tel condicional | 🟡 |
+| RF-011, RF-012, RF-013 | Registro candidato, validación y términos | 🟡 |
 | RF-008, RF-009 | Inicio y cierre de sesión | ✅ |
-| RF-004, RF-054 | Postulación y aprobación | ✅ |
-| RF-005, RF-006 | Mis solicitudes y cancelación | ✅ |
+| RF-004, RF-054 | Postulación, aprobación y bloqueo duplicado | 🟡 |
+| RF-005, RF-006 | Mis solicitudes y cancelación | 🟡 |
 | RF-015 | Registro de empresa | 🟡 |
-| RF-019 | Publicar vacante | 🟡 |
-| RF-020, RF-021 | Mis vacantes | 🟡 |
-| RF-022, RF-024 | Solicitudes recibidas | 🟡 |
-| RF-010 | Seguridad RLS | 🟡 |
+| RF-019 | Publicar vacante y teléfono condicional | 🟡 |
+| RF-020, RF-021 | Mis vacantes, conteo, pausa, reactivar, cerrar | 🟡 |
+| RF-022, RF-024 | Solicitudes recibidas y cambio de estatus | 🟡 |
+| RF-010 | Rutas y RLS | 🟡 |
+| RF-054 (extra) | Panel administrativo | ✅ |
+| Extra | Revisión de empresas y ofertas | 🟡 |
+| RF-014/RF-017, RF-016, RF-041, RF-029, RF-055 | Edición perfil, logo, favoritas, recuperación, etapas | ❌ (opcionales; no comprobados) |
 
-## Cuentas de prueba (pendientes de crear y verificar)
+## Accesibilidad y pruebas
 
-| Rol | Correo de prueba | Contraseña de prueba |
-|---|---|---|
-| Candidato aprobado | Pendiente | Pendiente |
-| Candidato sin aprobar | Pendiente | Pendiente |
-| Empresa | Pendiente | Pendiente |
+Lighthouse del listado: 100/100 escritorio y 100/100 móvil según capturas y selección del equipo. No implica certificación de toda la app. Evidencias de 320, 390, 768, 1024 y 1440 px en `img/evidencias/`. Comprobar manualmente foco, navegación por teclado, texto ≥18 px, contraste, formularios, menú y desplazamiento sin recorte. A 320 px repetir captura desde la parte superior y verificar que la barra inferior no oculte acciones.
 
-Crear cuentas ficticias exclusivas de la demo, sin reutilizar credenciales personales. Confirmar sus correos si Auth lo requiere. Después de la migración, el administrador debe aprobar al candidato de prueba desde el panel de administración; no editar solo el booleano `aprobado`. Completar la tabla con las credenciales de demostración solicitadas por el profesor, sin publicar claves de administración ni llaves privadas.
+- [Lighthouse desktop](img/evidencias/lighthouse-desktop.png) · [Lighthouse móvil](img/evidencias/lighthouse-mobile.png)
+- [320 px](img/evidencias/responsive-320.png) · [390 px](img/evidencias/responsive-390.png) · [768 px](img/evidencias/responsive-768.png) · [1024 px](img/evidencias/responsive-1024.png) · [1440 px](img/evidencias/responsive-1440.png)
 
-## Pruebas de A y B
+## SQL y datos de ejemplo
 
-1. Como visitante, verificar listado, búsqueda, filtros y detalle.
-2. Registrar candidato y verificar que el trigger cree su perfil; comprobar confirmación de correo si está habilitada.
-3. Iniciar sesión como candidato sin aprobar: no debe poder postularse.
-4. Iniciar sesión como candidato aprobado: postularse a una vacante activa y confirmar que no puede duplicarla.
-5. En Mis solicitudes verificar empresa, fecha y estatus; cancelar una pendiente y comprobar que no se pueda cancelar una resuelta.
-6. Cerrar sesión y comprobar que /mis-solicitudes redirija a login. Verificar aislamiento entre cuentas y restricciones RLS con usuarios no administradores.
-7. Comprobar alto contraste, teclado, móvil y Lighthouse (accesibilidad ≥ 90).
-8. Verificar compilación, URL pública, recarga de rutas y seis vacantes de ejemplo cuando C las cargue.
+`supabase/esquema.sql` reúne el esquema base, correcciones y migración administrativa de los paquetes utilizados. Es para una instalación nueva; **no volver a ejecutarlo en la base existente**. Se conserva `permisos_admin.sql` y `correcciones_parte_a.sql` como historial. Comparar el SQL con las políticas y columnas reales de Supabase; si hubo cambios manuales, documentarlos. `vacantes_ejemplo.sql` es opcional: cambiar el correo por una empresa ficticia existente y aprobar las ofertas desde el panel. No repetir la carga si ya existen seis ofertas públicas. Validar sin sesión que se vean al menos seis.
 
-Pendientes: resultados reales, URL de Vercel, video y diapositivas. 
+## Entrega
 
-## Parte C: empresa y datos de ejemplo
-
-Rutas: `/registro-empresa` (pública), `/empresa/vacantes`, `/empresa/publicar`, `/empresa/solicitudes` (protegidas por rol empresa). Se reutilizan AuthContext, RutaProtegida, Supabase y los estilos de AMAC. No se requieren tablas nuevas.
-
-1. Registrar una empresa ficticia desde Login → Empresa → Crear cuenta de empresa. Confirmar correo si corresponde.
-2. En Supabase SQL Editor, ejecutar `supabase/vacantes_ejemplo.sql` después de sustituir el correo de ejemplo por el de la empresa registrada. Carga seis vacantes ficticias sin duplicarlas si se repite con el mismo propietario. Tras la migración, aprobar la empresa y cada oferta desde el panel; solo entonces serán públicas.
-3. Desde la app publicar otra vacante con un teléfono de prueba autorizado y otra sin teléfono. Comprobar validaciones, conteo, pausa, reactivación y cierre. Mantener al menos seis vacantes activas para la entrega.
-4. Con un candidato aprobado, postularse; con la empresa revisar nombre, edad, colonia, experiencia y cambiar estatus. Comprobar que el candidato vea el cambio y no cancele una solicitud aceptada.
-5. Probar acceso cruzado de roles, empresa ajena, sesión cerrada, RLS y recarga de rutas. Verificar que la empresa no pueda modificar solicitudes canceladas.
-6. Completar cuentas de prueba verificadas, integrantes, URL Vercel, resultados, video y diapositivas.
-
-Decisiones: cerrar es definitivo desde el panel; el teléfono de contacto es opcional y se guarda solo si se activa la opción. No se incluyen funciones opcionales (logo de empresa y edición de perfil). Los estados RF permanecen parciales hasta pruebas reales.
-
-## Módulo de administración y revisión previa
-
-Instalar exclusivamente `supabase/permisos_admin.sql` en SQL Editor como propietario del proyecto existente. No ejecutar de nuevo esquema.sql. Conserva usuarios y solicitudes, añade `revision` a perfiles y vacantes; todas las ofertas existentes no revisadas pasan a pendiente y las no cerradas a pausada. Los perfiles previamente aprobados conservan aprobación. Las empresas sin aprobación previa quedan pendientes. Los nuevos registros de candidatos y empresas requieren aprobación para postularse y publicar respectivamente; pueden iniciar sesión antes de ser aprobados. Confirmación de email es independiente.
-
-Rutas `/admin`, `/admin/candidatos`, `/admin/empresas`, `/admin/vacantes`, `/admin/solicitudes`. El rol admin se asigna solo por personal autorizado en Supabase. El administrador aprueba, rechaza, suspende y devuelve a revisión perfiles y ofertas; puede cerrar ofertas definitivamente. Una empresa suspendida pierde acceso a publicación y modificación de solicitudes; sus ofertas no cerradas quedan suspendidas y deben revisarse otra vez. Las empresas aprobadas pueden pausar y reactivar únicamente sus vacantes aprobadas; no pueden modificar la revisión. El administrador consulta solicitudes sin cambiar decisiones de contratación. No hay borrado permanente. Los candidatos conservan el acceso histórico a ofertas a las que ya postularon, pero no pueden postularse de nuevo si no están activas y aprobadas.
-
-Orden: hacer copia de seguridad, preparar los archivos en una rama, ejecutar el SQL y desplegar enseguida la versión nueva. Si se sube directamente a la rama publicada, habrá un breve intervalo de incompatibilidad hasta completar ambos pasos. Probar con cuentas ficticias y refrescar la sesión tras cambiar aprobación. Revisar en Supabase que no existan políticas permisivas adicionales ajenas al esquema entregado. No publicar contraseñas administrativas ni claves secretas.
-
-Pruebas pendientes: candidato sin aprobación no postula; empresa sin aprobación no publica; empresa aprobada envía oferta pendiente; visitante no la ve; admin aprueba y aparece; suspender oferta y comprobar que empresa no puede reactivarla; rechazar empresa y comprobar que sus ofertas dejan de ser públicas; probar cierre definitivo, solicitudes históricas y que usuarios no admin no ejecuten RPC administrativas ni alteren revision/rol directamente. Comprobar seis ofertas públicas y accesibilidad. No se han ejecutado estas pruebas en la base real.
+Confirmar commits de todos, cuentas de prueba, captura actual de Schema Visualizer, resultados de pruebas, fecha de Blackboard, enlace del video (12–15 min) y permisos del enlace. 
